@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FlexiNotes — The Smart Digital Notebook</title>
+    <meta name="description" content="Official support page for FlexiNotes. Combine the flexibility of a blank sheet with the structure of a smart diary." />
+    
+    <link rel="icon" type="image/png" href="AppIcon.png" />
+    
+    <style>
+        :root {
+            /* Colori estratti direttamente da FlexiNotes */
+            --bg: #FAF5EB;          /* paperColor chiaro */
+            --card: #FFFFFF;
+            --card-border: #BFB8AD; /* lineColor */
+            --text: #594026;        /* labelColor */
+            --muted: #8A735E;
+            --accent: #D94040;      /* marginColor (Rosso) */
+            --accent-glow: rgba(217, 64, 64, 0.3);
+            --radius: 20px;
+            --max: 1000px;
+        }
+
+        * { box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", serif;
+            background-color: var(--bg);
+            /* Sfondo a righe stile quaderno! */
+            background-image: repeating-linear-gradient(transparent, transparent 39px, rgba(191, 184, 173, 0.4) 39px, rgba(191, 184, 173, 0.4) 40px);
+            background-attachment: fixed;
+            color: var(--text);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: min(var(--max), calc(100% - 40px));
+            margin: 0 auto;
+        }
+
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            background: rgba(250, 245, 235, 0.85);
+            /* Richiamo alla riga rossa verticale del margine */
+            border-bottom: 2px solid var(--accent);
+        }
+
+        .nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 0;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            text-decoration: none;
+            color: var(--text);
+        }
+
+        .brand img {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(89, 64, 38, 0.2);
+        }
+
+        .nav-links a {
+            color: var(--muted);
+            text-decoration: none;
+            margin-left: 28px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .nav-links a:hover { color: var(--accent); }
+
+        .hero {
+            padding: 120px 0 100px;
+            text-align: center;
+            position: relative;
+        }
+
+        .app-icon-main {
+            width: 128px;
+            height: 128px;
+            border-radius: 28px;
+            margin-bottom: 30px;
+            box-shadow: 0 15px 35px rgba(89, 64, 38, 0.3), 0 0 30px var(--accent-glow);
+        }
+
+        h1 {
+            margin: 0;
+            font-size: clamp(3.5rem, 10vw, 5.5rem);
+            line-height: 0.95;
+            font-weight: 900;
+            letter-spacing: -0.06em;
+            color: var(--text);
+        }
+
+        .lead {
+            margin: 32px auto;
+            max-width: 600px;
+            color: var(--muted);
+            font-size: 1.4rem;
+            font-weight: 500;
+            letter-spacing: -0.01em;
+            background: var(--bg); /* per coprire le righe di sfondo se serve */
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-top: 56px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            height: 60px;
+            padding: 0 36px;
+            border-radius: 16px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: #fff;
+            box-shadow: 0 10px 20px var(--accent-glow);
+        }
+
+        .btn-primary img {
+            height: 22px;
+            margin-right: 12px;
+        }
+
+        .btn-secondary {
+            background: #FFFFFF;
+            color: var(--text);
+            border: 1px solid var(--card-border);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            filter: brightness(1.1);
+        }
+
+        section { padding: 80px 0; }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 48px;
+            font-weight: 800;
+            letter-spacing: -0.04em;
+        }
+
+        .section-card {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius);
+            padding: 80px 40px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(89, 64, 38, 0.08);
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 40px;
+            margin-top: 60px;
+        }
+
+        .feature h3 { 
+            color: var(--accent); 
+            font-size: 1.5rem; 
+            margin-bottom: 16px; 
+            letter-spacing: -0.02em;
+        }
+        .feature p { color: var(--text); font-size: 1.1rem; margin: 0; }
+
+        .faq-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 32px;
+            margin-top: 40px;
+        }
+
+        .faq-item {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 32px;
+            border-radius: 20px;
+            border: 1px solid var(--card-border);
+            text-align: left;
+            box-shadow: 0 4px 15px rgba(89, 64, 38, 0.05);
+        }
+
+        .faq-item h4 {
+            font-size: 1.25rem;
+            margin-bottom: 12px;
+            color: var(--accent);
+        }
+
+        .faq-item p {
+            color: var(--text);
+            margin: 0;
+            font-size: 1rem;
+        }
+
+        .support-email {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 800;
+            font-size: 1.5rem;
+            display: inline-block;
+            margin-top: 20px;
+            background: #fff;
+            padding: 10px 20px;
+            border-radius: 12px;
+            border: 1px solid var(--card-border);
+        }
+        
+        footer {
+            padding: 100px 0 60px;
+            color: var(--muted);
+            font-size: 1rem;
+            text-align: center;
+            background: var(--bg);
+        }
+
+        .team-tag {
+            display: inline-block;
+            background: rgba(217, 64, 64, 0.1);
+            padding: 8px 16px;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 800;
+            letter-spacing: 0.15em;
+            margin-bottom: 24px;
+            color: var(--accent);
+            text-transform: uppercase;
+        }
+
+        @media (max-width: 600px) {
+            h1 { font-size: 3.5rem; }
+            .faq-grid { grid-template-columns: 1fr; }
+            .btn { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container nav">
+            <a href="#" class="brand">
+                <img src="AppIcon.png" alt="FlexiNotes">
+                <div>FlexiNotes</div>
+            </a>
+            <nav class="nav-links">
+                <a href="#about">About</a>
+                <a href="#faq">FAQ</a>
+                <a href="#support">Support</a>
+                <a href="privacy.html">Privacy</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="container">
+                <img src="AppIcon.png" alt="FlexiNotes Icon" class="app-icon-main">
+                <h1>Just Write.</h1>
+                <p class="lead">FlexiNotes is your smart digital notebook. Create custom grids, write by hand, and find your notes instantly with the interactive calendar.</p>
+                
+                <div class="hero-actions">
+                    <a class="btn btn-primary" href="#" target="_blank">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/3/31/Apple_logo_white.svg" alt="Apple Logo">
+                        Download on the App Store
+                    </a>
+                    <a class="btn btn-secondary" href="mailto:tonybonny2001@gmail.com">Contact Support</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="about">
+            <div class="container section-card">
+                <h2>Designed for Thinkers</h2>
+                <div class="features">
+                    <div class="feature">
+                        <h3>Custom Grids</h3>
+                        <p>Add and adjust rows and columns to build the perfect layout for your notes, schedules, and ideas.</p>
+                    </div>
+                    <div class="feature">
+                        <h3>Apple Pencil Ready</h3>
+                        <p>Enjoy a smooth, highly responsive, and natural handwriting experience directly on your custom paper.</p>
+                    </div>
+                    <div class="feature">
+                        <h3>Smart Calendar</h3>
+                        <p>Easily keep track of your activity. A red dot highlights the days you took notes, making retrieval effortless.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="faq">
+            <div class="container">
+                <h2 class="section-title">Frequently Asked Questions</h2>
+                <div class="faq-grid">
+                    <div class="faq-item">
+                        <h4>How do I change the page?</h4>
+                        <p>It's simple: just swipe left or right on the screen. It works exactly like flipping the pages of a real notebook.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h4>Can I export my notes?</h4>
+                        <p>Yes! Tap the share icon in the top right corner to instantly export your current page as a high-quality image.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h4>Are my notes private?</h4>
+                        <p>Absolutely. FlexiNotes saves your drawings and layouts exclusively on your local device. We have zero access to your data.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h4>Does it work offline?</h4>
+                        <p>100%. You don't need any internet connection to write, draw, or browse through your past notes.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="support" style="text-align: center; padding-bottom: 120px;">
+            <div class="container">
+                <h2 class="section-title">Still have questions?</h2>
+                <p class="lead">Have feedback or need technical assistance? We're here for you.</p>
+                <a class="support-email" href="mailto:tonybonny2001@gmail.com">tonybonny2001@gmail.com</a>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="team-tag">Antonio Bonetti</div>
+            <div style="margin-bottom: 12px; font-weight: 500;">
+                Handcrafted with passion for digital creators.
+            </div>
+            <div style="opacity: 0.6;">&copy; 2026 Antonio Bonetti. All rights reserved.</div>
+        </div>
+    </footer>
+</body>
+</html>
